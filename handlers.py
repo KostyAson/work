@@ -135,16 +135,19 @@ async def error(message : aiogram.types.Message, bot : aiogram.Bot, state : aiog
     user = 'id: ' + str(message.from_user.id)
     if message.from_user.username is not None:
         user += '\n@' + message.from_user.username
-    for admin in admins:
-        await bot.send_message(
-            chat_id=admin,
-            text=f'Сообщение от пользователя\n{user}\nТип обращения: Неполная комплектация/повреждения\n\n' + message.text
-        )
     date = dt.datetime.now()
     if dt.time(hour=9) <= date.time() <= dt.time(hour=18):
         await message.answer(answers.send_message, reply_markup=keyboards.exit_chat_keyboard)
     else:
         await message.answer(answers.send_message_error, reply_markup=keyboards.exit_chat_keyboard)
+    for admin in admins:
+        try:
+            await bot.send_message(
+                chat_id=admin,
+                text=f'Сообщение от пользователя\n{user}\nТип обращения: Неполная комплектация/повреждения\n\n' + message.text
+            )
+        except:
+            continue
 
 
 @router.message(states.AddInstructionState.add)

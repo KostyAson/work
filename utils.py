@@ -21,6 +21,8 @@ def add_instruction(message : aiogram.types.Message):
         instructions[key]['media_group'] = message.media_group_id
     if message.photo is not None:
         instructions[key]['photo'] = message.photo[0].file_id
+    if message.video is not None:
+        instructions[key]['video'] = message.video.file_id
     file = open('instructions.json', 'w')
     file.write(json.dumps(instructions))
     file.close()

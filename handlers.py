@@ -12,7 +12,9 @@ router = aiogram.Router()
 
 
 admins = [
-    1294019160
+    1294019160,
+    761247611,
+    392092274
 ]
 
 
@@ -68,6 +70,8 @@ async def get_instructions(callback : aiogram.types.CallbackQuery):
         await callback.message.answer_photo(photo=instruction['photo'], caption=instruction['text'])
     elif 'media_group' in instruction:
         await callback.message.answer_media_group(media=instruction['media_group'], caption=instruction['text'])
+    elif 'video' in instruction:
+        await callback.message.answer_video(video=instruction['video'], caption=instruction['text'])
     else:
         await callback.message.answer(text=instruction['text'])
     await callback.message.answer(

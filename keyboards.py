@@ -26,7 +26,7 @@ start_keyboard = aiogram.types.InlineKeyboardMarkup(
 
 exit_chat_keyboard = aiogram.types.ReplyKeyboardMarkup(
     keyboard=[
-        [aiogram.types.KeyboardButton(text='Выйти из чата')]
+        [aiogram.types.KeyboardButton(text='Меню')]
     ],
     resize_keyboard=True
 )

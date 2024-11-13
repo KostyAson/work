@@ -90,7 +90,7 @@ async def del_instruction(callback : aiogram.types.CallbackQuery):
 
 @router.message(states.SupportState.messaging)
 async def support(message : aiogram.types.Message, bot : aiogram.Bot, state : aiogram.fsm.context.FSMContext):
-    if message.text == 'Выйти из чата':
+    if message.text == 'Меню':
         await state.set_state(None)
         await message.answer(
             text='Вы вышли из чата',
@@ -104,21 +104,24 @@ async def support(message : aiogram.types.Message, bot : aiogram.Bot, state : ai
     user = 'id: ' + str(message.from_user.id)
     if message.from_user.username is not None:
         user += '\n@' + message.from_user.username
-    for admin in admins:
-        await bot.send_message(
-            chat_id=admin,
-            text=f'Сообщение от пользователя\n{user}\nТип обращения: сотрудник тех поддержки\n\n' + message.text
-        )
     date = dt.datetime.now()
     if dt.time(hour=9) <= date.time() <= dt.time(hour=18):
         await message.answer(answers.send_message, reply_markup=keyboards.exit_chat_keyboard)
     else:
         await message.answer(answers.send_message_error, reply_markup=keyboards.exit_chat_keyboard)
+    for admin in admins:
+        try:
+            await bot.send_message(
+                chat_id=admin,
+                text=f'Сообщение от пользователя\n{user}\nТип обращения: сотрудник тех поддержки\n\n' + message.text
+            )
+        except:
+            continue
 
 
 @router.message(states.ErrorState.messaging)
 async def error(message : aiogram.types.Message, bot : aiogram.Bot, state : aiogram.fsm.context.FSMContext):
-    if message.text == 'Выйти из чата':
+    if message.text == 'Меню':
         await state.set_state(None)
         await message.answer(
             text='/start',
@@ -135,7 +138,7 @@ async def error(message : aiogram.types.Message, bot : aiogram.Bot, state : aiog
     for admin in admins:
         await bot.send_message(
             chat_id=admin,
-            text=f'Сообщение от пользователя {user}\nТип обращения: Неполная комплектация/повреждения\n\n' + message.text
+            text=f'Сообщение от пользователя\n{user}\nТип обращения: Неполная комплектация/повреждения\n\n' + message.text
         )
     date = dt.datetime.now()
     if dt.time(hour=9) <= date.time() <= dt.time(hour=18):
